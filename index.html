@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ElecRest</title>
+  </head>
+  <body>
+	<div id="request">
+		<select id="method">
+			<option>GET</option>
+			<option>POST</option>
+			<option>PUT</option>
+			<option>PATCH</option>
+			<option>DELETE</option>
+		</select>
+		<input id="url" placeholder="URL" />
+		<button onClick="Javascript:send('Send');">Send</button>
+	</div>
+	<div id="response">
+		<div id="status">
+		</div>
+		<div id="responseBody">
+		</div>
+	</div>
+	<script type="text/javascript" src="js/Meta_Element.js" ></script>
+	<script type="text/javascript">
+		const fs = require('fs');
+		const spawn = require('child_process').spawn;
+
+		var url = document.querySelector('#url');
+		url.onkeypress = function(e) {
+			e = e || window.event;
+			var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+			if (charCode == 13) {
+				send();
+			}
+		};
+		function send() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4) {
+					document.querySelector('#status').innerHTML = "Status: "+ xhttp.status;
+					document.querySelector('#responseBody').innerHTML = xhttp.responseText;
+				}
+			};
+			var url = document.querySelector('#url').value;
+
+			if (url.substr(0, 7) != "http://")
+				url = "http://"+ url;
+			xhttp.open(document.querySelector('#method').value, url, true);
+			xhttp.send();
+		}
+	</script>
+  </body>
+</html>
