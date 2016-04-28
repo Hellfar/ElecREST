@@ -22,7 +22,7 @@
 		<div id="responseBody" style="border: 1px solid black">
 		</div>
 	</div>
-	<script type="text/javascript" src="../js/corres/Meta_Element.js" ></script>
+	<script type="text/javascript" src="../../dist/js/app.js" ></script>
 	<script type="text/javascript">
 		const fs = require('fs');
 		const spawn = require('child_process').spawn;
@@ -50,6 +50,22 @@
 			xhttp.open(document.querySelector('#method').value, url, true);
 			xhttp.send();
 		}
+
+		const routes = spawn('cat', ['t']);
+		routes.stdout.on('data', function(data)
+		{
+			console.log(`stdout: ${data}`);
+		});
+
+		routes.stderr.on('data', function(data)
+		{
+			console.log(`stderr: ${data}`);
+		});
+
+		routes.on('close', function(code)
+		{
+			console.log(`child process exited with code ${code}`);
+		});
 	</script>
   </body>
 </html>
