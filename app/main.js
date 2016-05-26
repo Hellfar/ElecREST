@@ -7,14 +7,12 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 const MenuItem = electron.MenuItem;
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 function test()
 {
 	console.log('test');
-	alert('test');
 }
 function createWindow () {
   // Create the browser window.
