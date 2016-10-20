@@ -8,6 +8,9 @@
   <div id="sideNav">
   </div>
   <div id="request">
+    <div id="header">
+      <button click="addHeader()">+</button>
+    </div>
     <select id="method">
       <option>GET</option>
       <option>POST</option>
@@ -24,7 +27,7 @@
     <div id="responseBody" style="border: 1px solid black">
     </div>
   </div>
-  <script type="text/javascript" src="../../dist/js/app.js" ></script>
+  <script type="text/javascript" src="../../app/js/app.js" ></script>
   <script type="text/javascript">
     const fs = require('fs');
     const spawn = require('child_process').spawn;
@@ -47,7 +50,7 @@
       };
       var url = document.querySelector('#url').value;
 
-      if (url.substr(0, 7) != "http://")
+      if (url.substr(0, 7) != "http://" && url.substr(0, 7) != "https://")
         url = "http://"+ url;
       xhttp.open(document.querySelector('#method').value, url, true);
       xhttp.send();
