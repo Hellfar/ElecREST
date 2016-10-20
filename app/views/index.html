@@ -5,75 +5,75 @@
     <title>ElecRest</title>
   </head>
   <body>
-	<div id="sideNav">
-	</div>
-	<div id="request">
-		<select id="method">
-			<option>GET</option>
-			<option>POST</option>
-			<option>PUT</option>
-			<option>PATCH</option>
-			<option>DELETE</option>
-		</select>
-		<input id="url" placeholder="URL" />
-		<button onClick="Javascript:send('Send');">Send</button>
-	</div>
-	<div id="response">
-		<div id="status">
-		</div>
-		<div id="responseBody" style="border: 1px solid black">
-		</div>
-	</div>
-	<script type="text/javascript" src="../../dist/js/app.js" ></script>
-	<script type="text/javascript">
-		const fs = require('fs');
-		const spawn = require('child_process').spawn;
+  <div id="sideNav">
+  </div>
+  <div id="request">
+    <select id="method">
+      <option>GET</option>
+      <option>POST</option>
+      <option>PUT</option>
+      <option>PATCH</option>
+      <option>DELETE</option>
+    </select>
+    <input id="url" placeholder="URL" />
+    <button onClick="Javascript:send('Send');">Send</button>
+  </div>
+  <div id="response">
+    <div id="status">
+    </div>
+    <div id="responseBody" style="border: 1px solid black">
+    </div>
+  </div>
+  <script type="text/javascript" src="../../dist/js/app.js" ></script>
+  <script type="text/javascript">
+    const fs = require('fs');
+    const spawn = require('child_process').spawn;
 
-		var url = document.querySelector('#url');
-		url.onkeypress = function(e) {
-			e = e || window.event;
-			var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-			if (charCode == 13) {
-				send();
-			}
-		};
-		function send() {
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (xhttp.readyState == 4) {
-					document.querySelector('#status').innerHTML = "Status: "+ xhttp.status;
-					document.querySelector('#responseBody').innerHTML = xhttp.responseText;
-				}
-			};
-			var url = document.querySelector('#url').value;
+    var url = document.querySelector('#url');
+    url.onkeypress = function(e) {
+      e = e || window.event;
+      var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+      if (charCode == 13) {
+        send();
+      }
+    };
+    function send() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4) {
+          document.querySelector('#status').innerHTML = "Status: "+ xhttp.status;
+          document.querySelector('#responseBody').innerHTML = xhttp.responseText;
+        }
+      };
+      var url = document.querySelector('#url').value;
 
-			if (url.substr(0, 7) != "http://")
-				url = "http://"+ url;
-			xhttp.open(document.querySelector('#method').value, url, true);
-			xhttp.send();
-		}
+      if (url.substr(0, 7) != "http://")
+        url = "http://"+ url;
+      xhttp.open(document.querySelector('#method').value, url, true);
+      xhttp.send();
+    }
 fs.readdir('./scenarios', function (err, files){
-	// if (err)
-	// 	console.error(err);
-	if (files)
-		for(var i = 0, l = files.length; i < l; i++)
-			document.querySelector('#sideNav').innerHTML += files[i] +'<br />';
+  // if (err)
+    // console.error(err);
+  if (files)
+    for(var i = 0, l = files.length; i < l; i++)
+      document.querySelector('#sideNav').innerHTML += files[i] +'<br />';
 });
-		// const routes = spawn('cat', ['scenarios/t']);
-		// routes.stdout.on('data', function(data)
-		// {
-		// 	console.log(`stdout: ${data}`);
-		// });
-		//
-		// routes.stderr.on('data', function(data)
-		// {
-		// 	console.log(`stderr: ${data}`);
-		// });
-		//
-		// routes.on('close', function(code)
-		// {
-		// 	console.log(`child process exited with code ${code}`);
-		// });
-	</script>
+    // const routes = spawn('cat', ['scenarios/t']);
+    // routes.stdout.on('data', function(data)
+    // {
+      // console.log(`stdout: ${data}`);
+    // });
+    //
+    // routes.stderr.on('data', function(data)
+    // {
+      // console.log(`stderr: ${data}`);
+    // });
+    //
+    // routes.on('close', function(code)
+    // {
+      // console.log(`child process exited with code ${code}`);
+    // });
+  </script>
   </body>
 </html>
