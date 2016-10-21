@@ -19,7 +19,8 @@
         <option>DELETE</option>
       </select>
       <input id="url" placeholder="URL" />
-      <button onClick="Javascript:send('Send');">Send</button>
+      <button onClick="Javascript:send('Send');">Send</button><br />
+      <textarea id="body" placeholder="body"></textarea>
     </div>
     <div id="response">
       <div id="status">
@@ -29,6 +30,7 @@
     </div>
     <script type="text/javascript" src="../../app/js/app.js" ></script>
     <script type="text/javascript" src="../../app/js/Type/Element/Element.js" ></script>
+    <script type="text/javascript" src="../../app/js/Type/Primary/Object/Object.js" ></script>
     <script type="text/javascript" src="../../app/js/corres/Meta_Element/Meta_Element.js" ></script>
     <script type="text/javascript">
       const fs = require('fs');
@@ -43,21 +45,52 @@
         }
       };
       function send() {
-        var xhttp = new XMLHttpRequest();
+        // Attempt to creat the XHR2 object
+        var xhttp;
+        try {
+          xhttp = new XMLHttpRequest();
+        } catch (e) {
+          try{
+            xhttp = new XDomainRequest();
+          } catch (e) {
+            try {
+              xhttp = new ActiveXObject('Msxml2.XMLHTTP');
+            } catch (e) {
+              try {
+                xhttp = new ActiveXObject('Microsoft.XMLHTTP');
+              } catch (e) {
+                throw ('Your browser is not compatible with XHR2');
+              }
+            }
+          }
+        }
         xhttp.onreadystatechange = function() {
           if (xhttp.readyState == 4) {
             document.querySelector('#status').innerHTML = "Status: "+ xhttp.status;
             document.querySelector('#responseBody').innerHTML = xhttp.responseText;
           }
         };
-        var url = document.querySelector('#url').value;
+        var method = document.querySelector('#method').value,
+            url = document.querySelector('#url').value,
+            headers = document.querySelectorAll("#header .param"),
+            l_headers = headers.length,
+            body = document.querySelector('#body').value;
 
-        if (url.substr(0, 7) != "http://" && url.substr(0, 7) != "https://")
+        if (url.substr(0, 7) != "http://" && url.substr(0, 8) != "https://")
           url = "http://"+ url;
-        xhttp.open(document.querySelector('#method').value, url, true);
-        xhttp.send();
+        console.log(method, url);
+        alert(body);
+        xhttp.open(method, url, true);
+        for (var i = 0; i < l_headers; i++) {
+          var param = headers[i],
+              k = param.querySelector("select").value,
+              v = param.querySelector("input").value;
+
+          xhttp.setRequestHeader(k, v);
+        }
+        xhttp.send(body);
       }
-fs.readdir('./scenarios', function (err, files){
+fs.readdir('./scenarios', function ( err, files ) {
   // if (err)
     // console.error(err);
   if (files)
@@ -65,17 +98,31 @@ fs.readdir('./scenarios', function (err, files){
       document.querySelector('#sideNav').innerHTML += files[i] +'<br />';
 });
       function addHeader(  ) {
-        console.log("TEST");
-        document.querySelector('#header').appendChilds(createElements([
+        document.querySelector('#header').appendChilds(createElements(
           {
-            "tag": "select",
-            "child": [
+            'tag': 'span',
+            'class':'param',
+            'child': jsonParams(
               {
-                "tag": "option"
+                "header": null,
+                "parameters": null,
+                "remove": null
+              },
+              {
+                "header": [
+                  "Accept-Language",
+                  "Content-Type",
+                  "Authorization",
+                ],
+                "remove": {
+                  "tag": "button",
+                  "onclick": "javascript:this.parentNode.parentNode.removeChild(this.parentNode);",
+                  "child": "-",
+                }
               }
-            ]
+            )
           }
-        ]));
+        ));
       }
       // const routes = spawn('cat', ['scenarios/t']);
       // routes.stdout.on('data', function(data)
