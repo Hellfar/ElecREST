@@ -1,19 +1,58 @@
 'use strict';
 
 const electron = require('electron');
+
+const fs = require('fs');
+const spawn = require('child_process').spawn;
+
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 const MenuItem = electron.MenuItem;
+
+fs.readdir('./scenarios', function ( err, files ) {
+  if (err)
+    console.error(err);
+  if (files)
+    for(var i = 0, l = files.length; i < l; i++)
+      document.querySelector('#sideNav').innerHTML += files[i] +'<br />';
+});
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-function test()
+function select_projects()
 {
-  console.log('test');
+  const {dialog} = require('electron');
+
+  var selected_projects = dialog.showOpenDialog({
+    properties: ['openDirectory', 'multiSelections']
+  }),
+      l_select_projects = selected_projects.length;
+
+  for (var i = 0; i < l_select_projects; i++)
+  {
+    console.log(selected_projects[i]);
+    const routes = spawn('rake', ['routes', '-f', selected_projects[i] +'/Rakefile']);
+    routes.stdout.on('data', function(data)
+    {
+      console.log(`stdout: ${data}`);
+    });
+
+    routes.stderr.on('data', function(data)
+    {
+      console.log(`stderr: ${data}`);
+    });
+
+    routes.on('close', function(code)
+    {
+      console.log(`child process exited with code ${code}`);
+    });
+  }
 }
+
+let mainWindow;
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600});
@@ -25,7 +64,7 @@ function createWindow () {
     submenu: [
       {
           label:'Open routes file',
-          click:test,
+          click:select_projects,
       },
     ]
   }));

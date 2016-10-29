@@ -33,9 +33,6 @@
     <script type="text/javascript" src="../../app/js/Type/Primary/Object/Object.js" ></script>
     <script type="text/javascript" src="../../app/js/corres/Meta_Element/Meta_Element.js" ></script>
     <script type="text/javascript">
-      const fs = require('fs');
-      const spawn = require('child_process').spawn;
-
       var url = document.querySelector('#url');
       url.onkeypress = function(e) {
         e = e || window.event;
@@ -90,13 +87,7 @@
         }
         xhttp.send(body);
       }
-fs.readdir('./scenarios', function ( err, files ) {
-  // if (err)
-    // console.error(err);
-  if (files)
-    for(var i = 0, l = files.length; i < l; i++)
-      document.querySelector('#sideNav').innerHTML += files[i] +'<br />';
-});
+
       function addHeader(  ) {
         document.querySelector('#header').appendChilds(createElements(
           {
@@ -124,21 +115,6 @@ fs.readdir('./scenarios', function ( err, files ) {
           }
         ));
       }
-      // const routes = spawn('cat', ['scenarios/t']);
-      // routes.stdout.on('data', function(data)
-      // {
-        // console.log(`stdout: ${data}`);
-      // });
-      //
-      // routes.stderr.on('data', function(data)
-      // {
-        // console.log(`stderr: ${data}`);
-      // });
-      //
-      // routes.on('close', function(code)
-      // {
-        // console.log(`child process exited with code ${code}`);
-      // });
     </script>
   </body>
 </html>
