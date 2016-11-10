@@ -33,6 +33,35 @@
     <script type="text/javascript" src="../../app/js/Type/Primary/Object/Object.js" ></script>
     <script type="text/javascript" src="../../app/js/corres/Meta_Element/Meta_Element.js" ></script>
     <script type="text/javascript">
+      var data = {
+        "test": "caca",
+      };
+      function  env_dereference( value ) {
+        var     ret = null,
+                ope = "${",
+                l_ope = ope.length,
+                end = "}",
+                l_end = end.length;
+
+        while ((t_pos = value.indexOf(ope)) != -1) {
+          var s_b = value.substr(t_pos),
+              i_e = s_b.indexOf(end) - l_ope,
+              s_c = s_b.substr(l_ope, i_e),
+              r = data[s_c];
+
+          if (r) {
+            var t_split = value.split("");
+
+            t_split.splice(t_pos, t_pos + i_e + l_ope + l_end, r);
+            ret = t_split.join("");
+          }
+          else
+            throw ("Var unknown reference at "+ t_pos +" (\""+ s_b +"\")");
+        }
+
+        return (ret);
+      }
+
       var url = document.querySelector('#url');
       url.onkeypress = function(e) {
         e = e || window.event;
@@ -73,15 +102,18 @@
             l_headers = headers.length,
             body = document.querySelector('#body').value;
 
+        if (!url)
+          return ;
         if (url.substr(0, 7) != "http://" && url.substr(0, 8) != "https://")
           url = "http://"+ url;
         console.log(method, url);
-        alert(body);
+
         xhttp.open(method, url, true);
         for (var i = 0; i < l_headers; i++) {
           var param = headers[i],
-              k = param.querySelector("select").value,
-              v = param.querySelector("input").value;
+              k = env_dereference(param.querySelector("select").value),
+              v = env_dereference(param.querySelector("input").value),
+              t_pos = -1;
 
           xhttp.setRequestHeader(k, v);
         }
