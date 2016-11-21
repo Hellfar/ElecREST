@@ -2,7 +2,6 @@
 
 const electron = require('electron');
 
-const fs = require('fs');
 const spawn = require('child_process').spawn;
 
 // Module to control application life.
@@ -11,14 +10,6 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 const MenuItem = electron.MenuItem;
-
-fs.readdir('./scenarios', function ( err, files ) {
-  if (err)
-    console.error(err);
-  if (files)
-    for(var i = 0, l = files.length; i < l; i++)
-      document.querySelector('#sideNav').innerHTML += files[i] +'<br />';
-});
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
