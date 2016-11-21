@@ -17,11 +17,15 @@ function select_projects()
 {
   const {dialog} = require('electron');
 
-  var selected_projects = dialog.showOpenDialog({
-    properties: ['openDirectory', 'multiSelections']
-  }),
-      l_select_projects = selected_projects.length;
+  var selected_projects,
+      l_select_projects;
 
+  selected_projects = dialog.showOpenDialog({
+    properties: ['openDirectory', 'multiSelections']
+  });
+  if (!selected_projects)
+    return;
+  l_select_projects = selected_projects.length;
   for (var i = 0; i < l_select_projects; i++)
   {
     console.log(selected_projects[i]);
