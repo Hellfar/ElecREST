@@ -1,0 +1,23 @@
+{
+  "default": {
+    "method": "GET",
+    "domain": "www.perdu.com",
+    "route": "/",
+    "request": {
+      "headers": [
+        []
+      ],
+      "body": ""
+    },
+    "response": {
+      "headers": [
+        [],
+      ],
+      "body": ""
+    }
+  },
+  "routes": {
+    "ping_internet": {
+    }
+  }
+}
