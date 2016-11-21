@@ -7,8 +7,9 @@
   <body>
     <div id="sideNav">
     </div>
-    <div id="request">
-      <button onClick="addHeader()">+</button>
+    <div id="request" style="border: 1px solid black">
+      <strong><span>Request</span></strong><br />
+      <button onClick="addHeader('#request')">+</button>
       <div id="header">
       </div>
       <select id="method">
@@ -22,7 +23,11 @@
       <button onClick="Javascript:send('Send');">Send</button><br />
       <textarea id="body" placeholder="body"></textarea>
     </div>
-    <div id="response">
+    <div id="response" style="border: 1px solid black">
+      <strong><span>Response</span></strong><br />
+      <button onClick="addHeader('#response')">+</button>
+      <div id="header">
+      </div>
       <div id="status">
       </div>
       <div id="responseBody" style="border: 1px solid black">
@@ -120,8 +125,8 @@
         xhttp.send(body);
       }
 
-      function addHeader(  ) {
-        document.querySelector('#header').appendChilds(createElements(
+      function addHeader( target ) {
+        document.querySelector(target +" #header").appendChilds(createElements(
           {
             'tag': 'span',
             'class':'param',
@@ -139,7 +144,7 @@
                 ],
                 "remove": {
                   "tag": "button",
-                  "onclick": "javascript:this.parentNode.parentNode.removeChild(this.parentNode);",
+                  "onclick": "javascript:this.parent('div').removeChild(this.parent('.param'));",
                   "child": "-",
                 }
               }
