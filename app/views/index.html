@@ -7,9 +7,12 @@
   <body>
     <div id="sideNav">
     </div>
+    <div id="data">
+      <button onClick="addData()">+</button><br />
+    </div>
     <div id="request" style="border: 1px solid black">
       <strong><span>Request</span></strong><br />
-      <button onClick="addHeader('#request')">+</button>
+      <button onClick="addHeader('#request')">+</button><br />
       <div id="header">
       </div>
       <select id="method">
@@ -25,7 +28,7 @@
     </div>
     <div id="response" style="border: 1px solid black">
       <strong><span>Response</span></strong><br />
-      <button onClick="addHeader('#response')">+</button>
+      <button onClick="addHeader('#response')">+</button><br />
       <div id="header">
       </div>
       <div id="status">
@@ -38,10 +41,7 @@
     <script type="text/javascript" src="../../app/assets/Type/Primary/Object/Object.js" ></script>
     <script type="text/javascript" src="../../app/assets/corres/Meta_Element/Meta_Element.js" ></script>
     <script type="text/javascript">
-      var data = {
-        "test": "caca",
-      };
-      function  env_dereference( value ) {
+      function  env_dereference( value, data ) {
         var     ret = null,
                 ope = "${",
                 l_ope = ope.length,
@@ -81,7 +81,7 @@
         try {
           xhttp = new XMLHttpRequest();
         } catch (e) {
-          try{
+          try {
             xhttp = new XDomainRequest();
           } catch (e) {
             try {
@@ -101,11 +101,14 @@
             document.querySelector('#responseBody').innerHTML = xhttp.responseText;
           }
         };
-        var method = document.querySelector('#method').value,
-            url = document.querySelector('#url').value,
-            headers = document.querySelectorAll("#header .param"),
+        var n_data = document.querySelectorAll("#data .pair"),
+            l_n_data = n_data.length,
+            data = {},
+            method = document.querySelector("#method").value,
+            url = document.querySelector("#url").value,
+            headers = document.querySelectorAll("#request #header .param"),
             l_headers = headers.length,
-            body = document.querySelector('#body').value;
+            body = document.querySelector("#body").value;
 
         if (!url)
           return ;
@@ -113,11 +116,20 @@
           url = "http://"+ url;
         console.log(method, url);
 
+        for (var i = 0; i < l_n_data; i++) {
+          var n_k = n_data[i].querySelector(".key"),
+              n_v = n_data[i].querySelector(".value");
+
+          data[n_k.value] = n_v.value;
+          console.log(n_k.value);
+          console.log(n_v.value);
+        }
+
         xhttp.open(method, url, true);
         for (var i = 0; i < l_headers; i++) {
           var param = headers[i],
-              k = env_dereference(param.querySelector("select").value),
-              v = env_dereference(param.querySelector("input").value),
+              k = env_dereference(param.querySelector("select").value, data),
+              v = env_dereference(param.querySelector("input").value, data),
               t_pos = -1;
 
           xhttp.setRequestHeader(k, v);
@@ -125,6 +137,32 @@
         xhttp.send(body);
       }
 
+      function addData(  ) {
+        document.querySelector("#data").appendChilds(createElements(
+          {
+            'tag': 'span',
+            'class':'pair',
+            'child': jsonParams(
+              {
+                "key": null,
+                "value": null,
+                "remove": null
+              },
+              {
+                "remove": {
+                  "tag": "button",
+                  "onclick": "javascript:this.parent('div').removeChild(this.parent('.pair'));",
+                  "child": "-",
+                }
+              }
+            ).concat([
+              {
+                'tag': 'br'
+              }
+            ])
+          }
+        ));
+      }
       function addHeader( target ) {
         document.querySelector(target +" #header").appendChilds(createElements(
           {
