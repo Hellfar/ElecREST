@@ -12,7 +12,7 @@
     </div>
     <div id="request" style="border: 1px solid black">
       <strong><span>Request</span></strong><br />
-      <button onClick="addHeader('#request')">+</button><br />
+      <button onClick="addHeader('request')">+</button><br />
       <div id="header">
       </div>
       <select id="method">
@@ -28,7 +28,7 @@
     </div>
     <div id="response" style="border: 1px solid black">
       <strong><span>Response</span></strong><br />
-      <button onClick="addHeader('#response')">+</button><br />
+      <button onClick="addHeader('response')">+</button><br />
       <div id="header">
       </div>
       <div id="status">
@@ -121,8 +121,7 @@
               n_v = n_data[i].querySelector(".value");
 
           data[n_k.value] = n_v.value;
-          console.log(n_k.value);
-          console.log(n_v.value);
+          console.log(n_k.value, n_v.value);
         }
 
         xhttp.open(method, url, true);
@@ -164,7 +163,7 @@
         ));
       }
       function addHeader( target ) {
-        document.querySelector(target +" #header").appendChilds(createElements(
+        document.querySelector("#"+ target +" #header").appendChilds(createElements(
           {
             'tag': 'span',
             'class':'param',
@@ -172,13 +171,14 @@
               {
                 "header": null,
                 "parameters": null,
-                "remove": null
+                "remove": null,
               },
               {
-                "header": [
+                "header": (target == 'request') ? [
                   "Accept-Language",
                   "Content-Type",
                   "Authorization",
+                ] : [
                 ],
                 "remove": {
                   "tag": "button",
@@ -189,7 +189,7 @@
             ).concat([
               {
                 'tag': 'br'
-              }
+              },
             ])
           }
         ));
