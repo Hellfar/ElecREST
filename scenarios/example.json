@@ -16,6 +16,10 @@
       "body": ""
     }
   },
+  "sample_headers_key": {
+    "Accept-Language": null,
+    "Content-Type": "application/json"
+  },
   "routes": {
     "ping_internet": {
     }

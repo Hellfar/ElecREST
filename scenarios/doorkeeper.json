@@ -1,0 +1,68 @@
+{
+  "sample_values": {
+    "dk_access_token": null,
+
+    "dk_token_type": null,
+    "dk_expires_in": null,
+    "dk_refresh_token": null,
+
+    "dk_resource_owner_id": null,
+    "dk_expires_in_seconds": null
+  },
+  "sample_headers_key": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer #{dk_access_token}"
+  },
+  "routes": {
+    "sign_in": {
+      "method": "POST",
+      "route": "/oauth/token",
+      "request": {
+        "headers": [
+          "Content-Type"
+        ],
+        "body": "{
+  \"grant_type\": \"password\",
+  \"username\": #{username},
+  \"password\": #{password},
+}"
+      },
+      "response": {
+        "body": "{
+  \"access_token\": \"#{dk_access_token}\",
+  \"token_type\": \"#{dk_token_type}\",
+  \"expires_in\": #{dk_expires_in},
+  \"refresh_token\": \"#{dk_refresh_token}\",
+  \"created_at\": #{}
+}"
+      }
+    },
+    "sign_info": {
+      "method": "GET",
+      "route": "/oauth/token/info",
+      "request": {
+        "headers": [
+          "Authorization"
+        ]
+      },
+      "response": {
+        "body": "{
+  \"resource_owner_id\": \"#{dk_resource_owner_id}\",
+  \"scopes\": #{},
+  \"expires_in_seconds\": #{dk_expires_in_seconds},
+  \"application\": #{},
+  \"created_at\": #{}
+}"
+      }
+    },
+    "sign_out": {
+      "method": "GET",
+      "route": "/oauth/revoke",
+      "request": {
+        "body": "{
+  \"token\": \"#{dk_access_token}\"
+}"
+      }
+    }
+  }
+}
