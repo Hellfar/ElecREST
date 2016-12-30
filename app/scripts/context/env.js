@@ -17,8 +17,8 @@ function  env_dereference( value, data ) {
       t_split.splice(t_pos, t_pos + i_e + l_ope + l_end, r);
       ret = t_split.join("");
     }
-    else
-      throw ("Var unknown reference at "+ t_pos +" (\""+ s_b +"\")");
+    // else
+    //   throw ("Var unknown reference at "+ t_pos +" (\""+ s_b +"\")");
   }
 
   return (ret);

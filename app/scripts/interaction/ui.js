@@ -1,5 +1,9 @@
 'use strict';
 
+function addParam( target ) {
+  ;
+}
+
 function addData(  ) {
   document.querySelector("#data").appendChilds(createElements(
     {

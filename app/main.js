@@ -13,7 +13,29 @@ const MenuItem = electron.MenuItem;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-function select_projects()
+
+var scenarios = require('./scripts/context/scenarios.js');
+
+function select_scenarios(  )
+{
+  const {dialog} = require('electron');
+
+  var selected_scenarios,
+      l_select_scenarios;
+
+  selected_scenarios = dialog.showOpenDialog({
+    properties: ['openFile', 'multiSelections']
+  });
+  if (!selected_scenarios)
+    return;
+  l_select_scenarios = selected_scenarios.length;
+  for (var i = 0; i < l_select_scenarios; i++)
+  {
+    scenarios.implement_scenario(selected_scenarios[i]);
+  }
+}
+
+function select_projects(  )
 {
   const {dialog} = require('electron');
 
@@ -58,8 +80,12 @@ function createWindow () {
     label: 'File',
     submenu: [
       {
-          label:'Open routes file',
-          click:select_projects,
+          label: 'Open scenarios file',
+          click: select_scenarios,
+      },
+      {
+          label: 'Open routes rails project',
+          click: select_projects,
       },
     ]
   }));
